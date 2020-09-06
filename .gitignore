@@ -1,0 +1,9 @@
+*.pyc
+venv/
+*.csv
+*.log
+.env
+.coverage
+Pulumi*.yaml
+*egg
+pulumi_utils.egg-info

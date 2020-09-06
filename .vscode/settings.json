@@ -1,0 +1,7 @@
+{
+    "python.formatting.provider": "black",
+    "python.pythonPath": "/Users/edmondoporcu1/Library/Caches/pypoetry/virtualenvs/pulumi-utils-X5zl2to4-py3.8",
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.linting.enabled": true
+}

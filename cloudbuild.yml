@@ -1,0 +1,23 @@
+steps:
+  - name: "gcr.io/kaniko-project/executor:latest"
+    id: Build test image
+    args:
+      - "--dockerfile"
+      - "docker/Dockerfile"
+      - "--destination"
+      - "gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA"
+      - "--cache=true"
+      - "--build-arg PYTHON_PACKAGE_NAME=$_PYTHON_PACKAGE_NAME"
+
+  - name: "gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA"
+    id: Run test
+    dir: /$_PYTHON_PACKAGE_NAME
+
+  - name: "gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA"
+    id: Check code quality
+    dir: /$_PYTHON_PACKAGE_NAME
+    entrypoint: /$_PYTHON_PACKAGE_NAME/check-codequality.sh
+
+substitutions:
+  _DOCKER_CACHE: "true"
+  _PYTHON_PACKAGE_NAME: "pulumi_utils"
