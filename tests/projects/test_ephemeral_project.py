@@ -4,6 +4,14 @@ from pulumi import Output, Input
 from tests.pulumi_mocks import PulumiMocks
 
 
+def call_side_effect(token: str, args: dict, provider: str):
+    import pdb
+
+    pdb.set_trace
+    print("diocane")
+    return {}
+
+
 pulumi.runtime.set_mocks(PulumiMocks())
 
 # noqa: E402

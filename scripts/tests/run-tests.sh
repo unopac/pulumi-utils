@@ -5,4 +5,4 @@ ls
 
 pwd
 
-python -m pytest --cov=barchart_import --cov-fail-under=80
+python -m pytest --cov=$PYTHON_PACKAGE_NAME --cov-fail-under=80
