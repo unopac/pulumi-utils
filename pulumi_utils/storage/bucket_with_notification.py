@@ -10,8 +10,8 @@ from pulumi_gcp import (
     storage,
 )
 
-import pulumi_utils.projects.ephemeral_project
-from ephemeral_project import Project
+from pulumi_utils.projects.ephemeral_project import Project
+
 
 
 class BucketWithNotificationArgs:
