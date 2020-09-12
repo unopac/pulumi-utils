@@ -6,11 +6,11 @@ from pulumi_gcp import (
     organizations,
     projects,
     pubsub,
-    serviceAccount,
+    serviceaccount,
     storage,
 )
 
-import ephemeral_project
+import pulumi_utils.projects.ephemeral_project
 from ephemeral_project import Project
 
 
