@@ -3,6 +3,11 @@ import pulumi
 from pulumi import Output, Input
 from tests.pulumi_mocks import PulumiMocks
 
+
+def call_side_effect():
+    return {}
+
+
 pulumi.runtime.set_mocks(PulumiMocks())
 
 # noqa: E402

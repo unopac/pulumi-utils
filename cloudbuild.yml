@@ -7,7 +7,8 @@ steps:
       - "--destination"
       - "gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA"
       - "--cache=true"
-      - "--build-arg PYTHON_PACKAGE_NAME=$_PYTHON_PACKAGE_NAME"
+      - "--build-arg"
+      - "PYTHON_PACKAGE_NAME=$_PYTHON_PACKAGE_NAME"
 
   - name: "gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA"
     id: Run test
