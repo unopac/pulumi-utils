@@ -13,7 +13,6 @@ from pulumi_gcp import (
 from pulumi_utils.projects.ephemeral_project import Project
 
 
-
 class BucketWithNotificationArgs:
 
     bucket_resource_name: str
