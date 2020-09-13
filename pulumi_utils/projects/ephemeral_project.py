@@ -91,11 +91,11 @@ class Project(ComponentResource):
             ),
         )
 
-        self.number = ephemeral_project.number
-        self.new_project_id = ephemeral_project.project_id
+        self.number = self.project.number
+        self.new_project_id = self.project.project_id
         self.register_outputs(
             {
-                "new_project_id": ephemeral_project.project_id,
-                "number": ephemeral_project.number,
+                "new_project_id": self.project.project_id,
+                "number": self.project.number,
             }
         )
