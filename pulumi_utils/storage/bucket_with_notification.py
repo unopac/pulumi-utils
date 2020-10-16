@@ -1,5 +1,5 @@
-import pulumi_gcp
-from pulumi import ComponentResource, Output, ResourceOptions
+import 
+from pulumi import ComponentResource, Output, ResourceOptions, log
 from pulumi_gcp import (
     cloudrun,
     compute,
@@ -51,6 +51,8 @@ class BucketWithNotification(ComponentResource):
             project=args.gcp_project.new_project_id,
             opts=opts,
         )
+
+        log.info(f'Trying to get project default service account for new project with {args.gcp_project.new_project_id}')
 
         gcs_account = storage.get_project_service_account(
             project=args.gcp_project.new_project_id,
