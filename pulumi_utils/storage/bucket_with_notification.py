@@ -53,14 +53,12 @@ class BucketWithNotification(ComponentResource):
 
         log.info(f'Trying to get project default service account for new project with {args.gcp_project.new_project_id}')
 
-        # gcs_account = storage.get_project_service_account(
-        #     project=args.gcp_project.new_project_id,
-        #     opts=opts,
-        # )
-        gcs_account = {
-            "email_address": "blah@credimi.com"
-        }
-        
+        gcs_account = storage.get_project_service_account(
+            project=args.gcp_project.new_project_id,
+            opts=opts.merge(ResourceOptions(depends_on=[args.gcp_project.new_project_id]))
+
+        )
+
         self.topic = pubsub.Topic(
             f"{args.bucket_resource_name}-{args.topic_resource_name_suffix}",
             project=args.gcp_project.new_project_id,

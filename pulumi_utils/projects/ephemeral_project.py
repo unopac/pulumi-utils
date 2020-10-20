@@ -1,7 +1,7 @@
 import base64
 
 import pulumi_gcp
-from pulumi import ComponentResource, Output, ResourceOptions
+from pulumi import ComponentResource, Output, ResourceOptions, log
 from pulumi_gcp import organizations, projects, pubsub, serviceaccount, storage
 
 
@@ -37,6 +37,7 @@ class Project(ComponentResource):
             organization=args.organization_name
         )
 
+        log.info(f'Creating a project with name {args.project_name}')
         # Create an ephemeral project
         self.project = organizations.Project(
             f"{name}-new-project",
