@@ -1,4 +1,3 @@
-import 
 from pulumi import ComponentResource, Output, ResourceOptions, log
 from pulumi_gcp import (
     cloudrun,
