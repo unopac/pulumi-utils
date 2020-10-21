@@ -9,7 +9,7 @@ from pulumi_gcp import (
     storage,
 )
 
-from organizations import Project
+
 
 
 class BucketWithNotificationArgs:
@@ -20,7 +20,7 @@ class BucketWithNotificationArgs:
 
     def __init__(
         self,
-        gcp_project: Project,
+        gcp_project: organizations.Project,
         bucket_resource_name: str,
         topic_resource_name_suffix: str,
     ):
@@ -55,7 +55,7 @@ class BucketWithNotification(ComponentResource):
 
         gcs_account = storage.get_project_service_account(
             project=args.gcp_project.project_id,
-            opts=opts.merge(ResourceOptions(depends_on=[args.project]))
+            opts=opts.merge(ResourceOptions(depends_on=[args.gcp_project]))
 
         )
 
@@ -77,7 +77,7 @@ class BucketWithNotification(ComponentResource):
 
         self.pubsub_accountcreator_policy_binding = projects.IAMMember(
             resource_name="project-service-account-pubsub-serviceAccount-tokenCreator",
-            project=args.gcp_project.new_project_id,
+            project=args.gcp_project.project_id,
             member=Output.concat(
                 "serviceAccount:service-",
                 args.gcp_project.number,
