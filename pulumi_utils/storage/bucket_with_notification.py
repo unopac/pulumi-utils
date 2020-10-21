@@ -55,7 +55,7 @@ class BucketWithNotification(ComponentResource):
 
         gcs_account = storage.get_project_service_account(
             project=args.gcp_project.new_project_id,
-            opts=opts.merge(ResourceOptions(depends_on=[args.gcp_project.new_project_id]))
+            opts=opts.merge(ResourceOptions(depends_on=[args.gcp_project.project]))
 
         )
 
