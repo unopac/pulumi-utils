@@ -45,13 +45,15 @@ class BucketWithNotification(ComponentResource):
 
         super().__init__("unopac:modules:BucketWithNotification", name, {}, opts)
 
+        log.info(f'Trying to get project default service account for new project with {args.gcp_project}')
+
         self.bucket = storage.Bucket(
             args.bucket_resource_name,
             project=args.gcp_project.project_id,
             opts=opts,
         )
 
-        log.info(f'Trying to get project default service account for new project with {args.gcp_project.new_project_id}')
+        
 
         gcs_account = storage.get_project_service_account(
             project=args.gcp_project.project_id,
