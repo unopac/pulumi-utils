@@ -1,7 +1,7 @@
 import base64
 
 import pulumi_gcp
-from pulumi import ComponentResource, Output, ResourceOptions
+from pulumi import ComponentResource, Output, ResourceOptions, log
 from pulumi_gcp import organizations, projects, pubsub, serviceaccount, storage
 
 
@@ -17,6 +17,8 @@ class ProjectArgs:
 class Project(ComponentResource):
 
     ephemeral_project_provider: pulumi_gcp.Provider
+
+    project: pulumi_gcp.organizations.Project
 
     new_project_id: Output[str]
 
@@ -35,39 +37,45 @@ class Project(ComponentResource):
             organization=args.organization_name
         )
 
+        log.info(f'Creating a project with name {args.project_name}')
         # Create an ephemeral project
-        ephemeral_project = organizations.Project(
+        self.project = organizations.Project(
             f"{name}-new-project",
             name=args.project_name,
             project_id=args.project_name,
             billing_account=root_project.billing_account,
             org_id=organization.org_id,
+            opts=ResourceOptions(parent=self),
         )
 
         self.project_owner_service_account = serviceaccount.Account(
             resource_name=f"{args.project_name}-project-owner-service-account",
             account_id="projectowner",
-            project=ephemeral_project.project_id,
+            project=self.project.project_id,
+            opts=ResourceOptions(parent=self),
         )
 
         project_owner_service_account_key = serviceaccount.Key(
             resource_name=f"{args.project_name}-project-owner-service-account-key",
             service_account_id=self.project_owner_service_account.name,
+            opts=ResourceOptions(parent=self),
         )
 
         project_owner_serviceaccount_iam_membership = projects.IAMMember(
             resource_name=f"{args.project_name}-project-owner-service-account-iam-member",
-            project=ephemeral_project.project_id,
+            project=self.project.project_id,
             role="roles/owner",
             member=self.project_owner_service_account.email.apply(
                 lambda service_account_email: f"serviceAccount:{service_account_email}"
             ),
+            opts=ResourceOptions(parent=self),
         )
 
         resourceManagerService = projects.Service(
             f"{args.project_name}-enable-resorce-management",
-            project=ephemeral_project.project_id,
+            project=self.project.project_id,
             service="cloudresourcemanager.googleapis.com",
+            opts=ResourceOptions(parent=self),
         )
 
         self.ephemeral_project_provider = pulumi_gcp.Provider(
@@ -80,14 +88,15 @@ class Project(ComponentResource):
                     resourceManagerService,
                     project_owner_serviceaccount_iam_membership,
                 ],
+                parent=self,
             ),
         )
 
-        self.number = ephemeral_project.number
-        self.new_project_id = ephemeral_project.project_id
+        self.number = self.project.number
+        self.new_project_id = self.project.project_id
         self.register_outputs(
             {
-                "new_project_id": ephemeral_project.project_id,
-                "number": ephemeral_project.number,
+                "new_project_id": self.project.project_id,
+                "number": self.project.number,
             }
         )

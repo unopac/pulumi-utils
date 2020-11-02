@@ -1,17 +1,15 @@
-import pulumi_gcp
-from pulumi import ComponentResource, Output, ResourceOptions
+from pulumi import ComponentResource, Output, ResourceOptions, log
 from pulumi_gcp import (
     cloudrun,
     compute,
     organizations,
     projects,
     pubsub,
-    serviceAccount,
+    serviceaccount,
     storage,
 )
 
-import ephemeral_project
-from ephemeral_project import Project
+
 
 
 class BucketWithNotificationArgs:
@@ -22,7 +20,7 @@ class BucketWithNotificationArgs:
 
     def __init__(
         self,
-        gcp_project: Project,
+        gcp_project: organizations.Project,
         bucket_resource_name: str,
         topic_resource_name_suffix: str,
     ):
@@ -47,20 +45,25 @@ class BucketWithNotification(ComponentResource):
 
         super().__init__("unopac:modules:BucketWithNotification", name, {}, opts)
 
+        log.info(f'Trying to get project default service account for new project with {args.gcp_project}')
+
         self.bucket = storage.Bucket(
             args.bucket_resource_name,
-            project=args.gcp_project.new_project_id,
+            project=args.gcp_project.project_id,
             opts=opts,
         )
 
+        
+
         gcs_account = storage.get_project_service_account(
-            project=args.gcp_project.new_project_id,
-            opts=opts,
+            project=args.gcp_project.project_id,
+            opts=opts.merge(ResourceOptions(depends_on=[args.gcp_project]))
+
         )
 
         self.topic = pubsub.Topic(
             f"{args.bucket_resource_name}-{args.topic_resource_name_suffix}",
-            project=args.gcp_project.new_project_id,
+            project=args.gcp_project.project_id,
             opts=opts,
         )
 
@@ -76,7 +79,7 @@ class BucketWithNotification(ComponentResource):
 
         self.pubsub_accountcreator_policy_binding = projects.IAMMember(
             resource_name="project-service-account-pubsub-serviceAccount-tokenCreator",
-            project=args.gcp_project.new_project_id,
+            project=args.gcp_project.project_id,
             member=Output.concat(
                 "serviceAccount:service-",
                 args.gcp_project.number,
