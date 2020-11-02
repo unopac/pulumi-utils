@@ -27,7 +27,7 @@ def test_ephemeral_project():
     project = Project("name", args)
 
     def test_properties(args):
-        new_project_id = args
+        new_project_id = args[0]
         assert new_project_id == project_name
 
     Output.all(project.new_project_id).apply(test_properties)
