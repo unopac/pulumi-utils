@@ -55,11 +55,13 @@ class BucketWithNotification(ComponentResource):
 
         
 
-        gcs_account = storage.get_project_service_account(
-            project=args.gcp_project.project_id,
-            opts=opts.merge(ResourceOptions(depends_on=[args.gcp_project]))
-
+        gcs_account = args.gcp_project.new_project_id.apply(
+            lambda project_id: storage.get_project_service_account(
+                project=args.gcp_project.new_project_id,
+                opts=opts.merge(ResourceOptions(depends_on=[args.gcp_project]))
+            )
         )
+        
 
         self.topic = pubsub.Topic(
             f"{args.bucket_resource_name}-{args.topic_resource_name_suffix}",
