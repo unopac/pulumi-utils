@@ -22,6 +22,8 @@ pre-commit = "^2.7.1"
 seed-isort-config = "^2.2.0"
 rootpath = "^0.1.1"
 pytest-icdiff = "^0.5"
+mypy = "^0.790"
+flake8-noqa = "^1.0.5"
 
 
 [build-system]

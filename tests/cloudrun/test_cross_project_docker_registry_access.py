@@ -1,6 +1,6 @@
 import pulumi
+from pulumi import Input, Output
 
-from pulumi import Output, Input
 from tests.pulumi_mocks import PulumiMocks
 
 
@@ -10,8 +10,8 @@ def call_side_effect():
 
 pulumi.runtime.set_mocks(PulumiMocks())
 
-# noqa: E402
-from pulumi_utils.cloudrun.cross_project_docker_registry_access import (
+
+from pulumi_utils.cloudrun.cross_project_docker_registry_access import (  # noqa: E402
     CrossProjectCloudRunAccess,
     CrossProjectCloudRunAccessArgs,
 )

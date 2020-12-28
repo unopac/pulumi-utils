@@ -37,7 +37,7 @@ class Project(ComponentResource):
             organization=args.organization_name
         )
 
-        log.info(f'Creating a project with name {args.project_name}')
+        log.info(f"Creating a project with name {args.project_name}")
         # Create an ephemeral project
         self.project = organizations.Project(
             f"{name}-new-project",

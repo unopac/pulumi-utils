@@ -1,4 +1,6 @@
-from pulumi import ComponentResource, Output, ResourceOptions, log
+from typing import Optional
+
+from pulumi import ComponentResource, InvokeOptions, Output, ResourceOptions, log
 from pulumi_gcp import (
     cloudrun,
     compute,
@@ -8,14 +10,13 @@ from pulumi_gcp import (
     serviceaccount,
     storage,
 )
-
-
+from pulumi_gcp.storage import AwaitableGetProjectServiceAccountResult
 
 
 class BucketWithNotificationArgs:
 
     bucket_resource_name: str
-    gcp_project: str
+    gcp_project: organizations.Project
     topic_resource_name_suffix: str
 
     def __init__(
@@ -39,13 +40,23 @@ class BucketWithNotification(ComponentResource):
 
     notification: storage.Notification
 
+    def _get_storage_project_service_account(
+        self, project_id: str, opts: Optional[ResourceOptions]
+    ) -> AwaitableGetProjectServiceAccountResult:
+        invoke_opts = None
+        if opts is not None:
+            invoke_opts = InvokeOptions(provider=opts.provider)
+        return storage.get_project_service_account(project=project_id, opts=invoke_opts)
+
     def __init__(
         self, name: str, args: BucketWithNotificationArgs, opts: ResourceOptions = None
     ):
 
         super().__init__("unopac:modules:BucketWithNotification", name, {}, opts)
 
-        log.info(f'Trying to get project default service account for new project with {args.gcp_project}')
+        log.info(
+            f"Trying to get project default service account for new project with {args.gcp_project}"
+        )
 
         self.bucket = storage.Bucket(
             args.bucket_resource_name,
@@ -53,15 +64,11 @@ class BucketWithNotification(ComponentResource):
             opts=opts,
         )
 
-        
-
-        gcs_account = args.gcp_project.new_project_id.apply(
-            lambda project_id: storage.get_project_service_account(
-                project=args.gcp_project.new_project_id,
-                opts=opts.merge(ResourceOptions(depends_on=[args.gcp_project]))
+        gcs_account = args.gcp_project.project_id.apply(
+            lambda project_id: self._get_storage_project_service_account(
+                project_id, opts
             )
         )
-        
 
         self.topic = pubsub.Topic(
             f"{args.bucket_resource_name}-{args.topic_resource_name_suffix}",

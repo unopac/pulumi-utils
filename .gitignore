@@ -7,3 +7,4 @@ venv/
 Pulumi*.yaml
 *egg
 pulumi_utils.egg-info
+Earthfile
