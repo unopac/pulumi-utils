@@ -20,7 +20,6 @@ test: install
 
 mypy:
 	mypy ${PYTHON_PACKAGE_NAME}/**
-	mypy tests/**
 
 fix-style:
 	isort .
