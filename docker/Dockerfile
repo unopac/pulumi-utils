@@ -27,4 +27,4 @@ COPY tests ./tests
 
 ENV PYTHON_PACKAGE_NAME ${PYTHON_PACKAGE_NAME}
 
-RUN make mode=CI install mypy check_codequality PYTHON_PACKAGE_NAME=${PYTHON_PACKAGE_NAME} test
+RUN make mode=CI install PYTHON_PACKAGE_NAME=${PYTHON_PACKAGE_NAME}
