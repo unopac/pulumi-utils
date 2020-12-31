@@ -10,14 +10,14 @@ steps:
       - "--build-arg"
       - "PYTHON_PACKAGE_NAME=$_PYTHON_PACKAGE_NAME"
 
-  - name: "gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA"
-    id: Run mypi
-    dir: /$_PYTHON_PACKAGE_NAME
-    entrypoint: /$_PYTHON_PACKAGE_NAME/mypi
+  # - name: "gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA"
+  #   id: Run mypi
+  #   dir: /$_PYTHON_PACKAGE_NAME
+  #   entrypoint: /$_PYTHON_PACKAGE_NAME/make mypy
 
   - name: "gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA"
     id: Run test
-    dir: /$_PYTHON_PACKAGE_NAME
+    dir: /$_PYTHON_PACKAGE_NAME/make test
 
   - name: "gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA"
     id: Check code quality
