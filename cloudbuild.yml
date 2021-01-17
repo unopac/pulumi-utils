@@ -13,16 +13,17 @@ steps:
   - name: "gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA"
     id: Run mypi
     dir: /$_PYTHON_PACKAGE_NAME
-    entrypoint: /$_PYTHON_PACKAGE_NAME/make mypy
+    entrypoint: make mypy
 
   - name: "gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA"
     id: Run test
-    dir: /$_PYTHON_PACKAGE_NAME/make test
+    dir: /$_PYTHON_PACKAGE_NAME
+    entrypoint: make test
 
   - name: "gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA"
     id: Check code quality
     dir: /$_PYTHON_PACKAGE_NAME
-    entrypoint: /$_PYTHON_PACKAGE_NAME/make check-codequality
+    entrypoint: make check-codequality
 
 substitutions:
   _DOCKER_CACHE: "true"
