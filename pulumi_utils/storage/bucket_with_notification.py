@@ -14,6 +14,11 @@ from pulumi_gcp.storage import AwaitableGetProjectServiceAccountResult
 
 
 class BucketWithNotificationArgs:
+    """Creates a Bucket whose writes determine notifications on a Google PubSub Topic
+    :param bucket_resource_name: The name of the Google Object Storage bucket to create
+    :param gcp_project: The owning gcp project
+    :param topic_resource_name_suffix: The suffix to append to the bucket name to create the topic
+    """
 
     bucket_resource_name: str
     gcp_project: organizations.Project
@@ -43,6 +48,7 @@ class BucketWithNotification(ComponentResource):
     def _get_storage_project_service_account(
         self, project_id: str, opts: Optional[ResourceOptions]
     ) -> AwaitableGetProjectServiceAccountResult:
+        """Retrieve the default project service account for Cloud storage"""
         invoke_opts = None
         if opts is not None:
             invoke_opts = InvokeOptions(provider=opts.provider)
