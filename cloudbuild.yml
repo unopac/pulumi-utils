@@ -16,7 +16,7 @@ steps:
     entrypoint: /bin/bash
     args:
       - "-c"
-      - "ls"
+      - "pwd"
       # - "make mypy"
 
   - name: "gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA"
