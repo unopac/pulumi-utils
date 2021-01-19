@@ -12,7 +12,7 @@ steps:
 
   - name: "gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA"
     id: Run mypi
-    dir: /$_PYTHON_PACKAGE_NAME
+    dir: /home/$_PYTHON_PACKAGE_NAME
     entrypoint: /bin/bash
     args:
       - "-c"
