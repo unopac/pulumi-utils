@@ -16,18 +16,23 @@ steps:
     entrypoint: /bin/bash
     args:
       - "-c"
-      - "ls"
-      # - "make mypy"
+      - "make mypy"
 
   - name: "gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA"
     id: Run test
-    dir: /$_PYTHON_PACKAGE_NAME
-    entrypoint: make test
+    dir: /home/$_PYTHON_PACKAGE_NAME
+    entrypoint: /bin/bash
+    args:
+      - "-c"
+      - "make test"
 
   - name: "gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA"
     id: Check code quality
-    dir: /$_PYTHON_PACKAGE_NAME
-    entrypoint: make check-codequality
+    dir: /home/$_PYTHON_PACKAGE_NAME
+    entrypoint: /bin/bash
+    args:
+      - "-c"
+      - "make codequality"
 
 substitutions:
   _DOCKER_CACHE: "true"
