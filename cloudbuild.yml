@@ -17,6 +17,8 @@ steps:
     args:
       - "-c"
       - "make mypy"
+    env:
+      - 'PYTHON_PACKAGE_NAME=$_PYTHON_PACKAGE_NAME'
 
   - name: "gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA"
     id: Run test
@@ -25,6 +27,8 @@ steps:
     args:
       - "-c"
       - "make test"
+    env:
+      - 'PYTHON_PACKAGE_NAME=$_PYTHON_PACKAGE_NAME'
 
   - name: "gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA"
     id: Check code quality
@@ -33,6 +37,8 @@ steps:
     args:
       - "-c"
       - "make codequality"
+    env:
+      - 'PYTHON_PACKAGE_NAME=$_PYTHON_PACKAGE_NAME'
 
 substitutions:
   _DOCKER_CACHE: "true"
