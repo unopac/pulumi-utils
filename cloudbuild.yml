@@ -36,7 +36,7 @@ steps:
     entrypoint: /bin/bash
     args:
       - "-c"
-      - "make codequality"
+      - "make check_codequality"
     env:
       - 'PYTHON_PACKAGE_NAME=$_PYTHON_PACKAGE_NAME'
 
